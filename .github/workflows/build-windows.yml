@@ -13,7 +13,7 @@ jobs:
         submodules: recursive
     - name: Install Boost
       run: |
-        cd /d C:\
+        cd C:\
         curl -LsO https://boostorg.jfrog.io/artifactory/main/beta/1.78.0.beta1/source/boost_1_78_0_b1.zip
         unzip -q boost_1_78_0_b1.zip
         cd boost_1_78_0
