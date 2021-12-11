@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Build on Windows
 
 on:
   push:
@@ -11,18 +11,27 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
+    - name: Install Boost
+      run: |
+        cd /d C:\
+        curl -LsO https://boostorg.jfrog.io/artifactory/main/beta/1.78.0.beta1/source/boost_1_78_0_b1.zip
+        unzip -q boost_1_78_0_b1.zip
+        cd boost_1_78_0
+        bootstrap
+    - name: Setup environment
+      run: |
+        echo set RIME_ROOT=%CD% > env.bat
+        echo set BOOST_ROOT=C:\boost_1_78_0 >> env.bat
+        echo set ARCH=x64 >> env.bat
+        echo set BJAM_TOOLSET=msvc-14.2 >> env.bat
+        echo set CMAKE_GENERATOR="Visual Studio 17 2022" >> env.bat
+        echo set PLATFORM_TOOLSET=v142 >> env.bat
     - name: Build
       run: |
         build boost
         build thirdparty
         build librime
         build test
-      env:
-        BOOST_ROOT: C:/Users/ayaka/Projects/boost_1_78_0
-        ARCH: x64
-        BJAM_TOOLSET: msvc-14.2
-        CMAKE_GENERATOR: "Visual Studio 17 2022"
-        PLATFORM_TOOLSET: v142
     - name: Test
       run: |
         copy /y dist\lib\rime.dll build\test
