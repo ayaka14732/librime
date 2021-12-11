@@ -17,7 +17,7 @@ jobs:
         curl -LsO https://boostorg.jfrog.io/artifactory/main/beta/1.78.0.beta1/source/boost_1_78_0_b1.zip
         unzip -q boost_1_78_0_b1.zip
         cd boost_1_78_0
-        bootstrap
+        bootstrap.bat
     - name: Setup environment
       run: |
         echo set RIME_ROOT=%CD% > env.bat
@@ -28,10 +28,10 @@ jobs:
         echo set PLATFORM_TOOLSET=v142 >> env.bat
     - name: Build
       run: |
-        build boost
-        build thirdparty
-        build librime
-        build test
+        build.bat boost
+        build.bat thirdparty
+        build.bat librime
+        build.bat test
     - name: Test
       run: |
         copy /y dist\lib\rime.dll build\test
