@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Build
+      run: |
+        build boost
+        build thirdparty
+        build librime
+        build test
+      env:
+        BOOST_ROOT: C:/Users/ayaka/Projects/boost_1_78_0
+        ARCH: x64
+        BJAM_TOOLSET: msvc-14.2
+        CMAKE_GENERATOR: "Visual Studio 17 2022"
+        PLATFORM_TOOLSET: v142
+    - name: Test
+      run: |
+        copy /y dist\lib\rime.dll build\test
+        cd build\test
+        .\Release\rime_test.exe
