@@ -25,14 +25,20 @@ jobs:
         echo 'set BJAM_TOOLSET=msvc-14.2' >> env.bat
         echo 'set CMAKE_GENERATOR="Visual Studio 17 2022"' >> env.bat
         echo 'set PLATFORM_TOOLSET=v142' >> env.bat
-    - name: Build
-      run: |
-        .\build.bat boost
-        .\build.bat thirdparty
-        .\build.bat librime
-        .\build.bat test
-    - name: Test
-      run: |
-        copy /y dist\lib\rime.dll build\test
-        cd build\test
-        .\Release\rime_test.exe
+    - name: Build boost
+      run: .\build.bat boost
+    # - name: Build
+    #   run: |
+    #     .\build.bat thirdparty
+    #     .\build.bat librime
+    #     .\build.bat test
+    # - name: Test
+    #   run: |
+    #     copy /y dist\lib\rime.dll build\test
+    #     cd build\test
+    #     .\Release\rime_test.exe
+    - name: Start SSH session
+      uses: luchihoratiu/debug-via-ssh@main
+      with:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+        SSH_PASS: ${{ secrets.SSH_PASS }}
